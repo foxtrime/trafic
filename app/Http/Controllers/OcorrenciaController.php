@@ -36,6 +36,11 @@ class OcorrenciaController extends Controller
     public function create()
     {
 
+        $data_atual = Carbon::now('America/Sao_Paulo')->format('Y-m-d');
+        $hora_atual = Carbon::now('America/Sao_Paulo')->format('H:i');
+
+        $key_maps = env('MAPS_SECRET_KEY', '');
+
         $agentes = Agente::with('usuario')->where('user_id','!=', Auth::user()->id)->get();
 
         $atendimentos = ConfigAtendimento::all();
@@ -46,7 +51,7 @@ class OcorrenciaController extends Controller
         $tipos = ConfigTipo::all();
         $transportados = ConfigTransportado::all();
         
-        return view('ocorrencia.create', compact('atendimentos','categorias','climas','conducoes','setores','tipos','transportados','agentes'));
+        return view('ocorrencia.create', compact('atendimentos','categorias','climas','conducoes','setores','tipos','transportados','agentes','data_atual','hora_atual','key_maps'));
     }
 
     public function store(Request $request)
@@ -72,6 +77,9 @@ class OcorrenciaController extends Controller
         $ocorrencia->envolvidos         = $request->envolvidos;
         $ocorrencia->relato             = $request->relato;
         $ocorrencia->providencia        = $request->providencia;
+
+        $ocorrencia->latitude           =  $request->latitude;
+        $ocorrencia->longitude          =  $request->longitude;
         
 
         $ocorrencia->sequencia          = 'XXX';
@@ -129,6 +137,11 @@ class OcorrenciaController extends Controller
          return redirect()->route('ocorrencia.index');
 
     
+    }
+    
+    public function edit($id){
+
+        return view('ocorrencia.edit');
     }
 
     public function show($id)

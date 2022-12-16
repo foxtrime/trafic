@@ -29,12 +29,12 @@ class CreateOcorrenciasTable extends Migration
             $table->text('providencia');
 
 
-            $table->BigInteger('conducao_id')->unsigned();
-            $table->BigInteger('setor_id')->unsigned();
-            $table->BigInteger('tipo_id')->unsigned();
-            $table->BigInteger('atendimento_id')->unsigned();
-            $table->BigInteger('clima_id')->unsigned();
-            $table->BigInteger('transportado_id')->unsigned();
+            $table->BigInteger('conducao_id')->unsigned()->nullable();
+            $table->BigInteger('setor_id')->unsigned()->nullable();
+            $table->BigInteger('tipo_id')->unsigned()->nullable();
+            $table->BigInteger('atendimento_id')->unsigned()->nullable();
+            $table->BigInteger('clima_id')->unsigned()->nullable();
+            $table->BigInteger('transportado_id')->unsigned()->nullable();
             
             $table->foreign('conducao_id')->references('id')->on('config_conducaos');
             $table->foreign('setor_id')->references('id')->on('config_setors');

@@ -2,6 +2,8 @@
 @section('htmlheader_title', 'Home')
 @section('content')
 
+<link rel="stylesheet" href="{{ asset('css/filepreview.css') }}">
+
     <div class="x_panel modal-content">
 		<div class="x_title">
 			<h2><i class="fas fa-user-shield"></i> Novo Agente </h2>
@@ -16,20 +18,27 @@
 					<div id="desabilita">
 						<div class="form-group row">
 							<div class="col-md-3 col-sm-3" style="float: left!important">
-								<div class="fileinput fileinput-new" data-provides="fileinput" >
-									<div class="fileinput-preview img-thumbnail" data-trigger="fileinput" style="width: 150px; height: 200px; ">
-									</div>
-									
-									<div>
-									<span class="btn btn-outline-secondary btn-file">
-											<span class="fileinput-new" 		style="text-align: center">Adicionar</span>
-											<span class="fileinput-exists"  	style="font-size: 11px;">Alterar</span>
-											{{-- <input type="file" name="foto" value={{isset($guarda->foto) ? 'data:image/jpg;base64,'.base64_decode($guarda->foto)   : old('foto') }}> --}}
-									</span>
-									<a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput" style="font-size: 11px;">Remover</a>
-									</div>
+								<div class="wrapper">
+								   <div class="image">
+									  <img class="img" >
+								   </div>
+								   <div class="content">
+									  <div class="icon" style="padding-left: 45%;">
+										 <i class="fas fa-cloud-upload-alt"></i>
+									  </div>
+									  <div class="text" style="padding-bottom: 70px;">
+										Nenhum Arquivo Selecionado
+									  </div>
+								   </div>
+								   <div id="cancel-btn">
+									  <i class="fas fa-times"></i>
+								   </div>
+								   <div class="file-name">
+									  File name here
+								   </div>
 								</div>
-
+								<button onclick="defaultBtnActive()" id="custom-btn">Escolha uma Imagem</button>
+								<input id="default-btn" name="image" type="file" style="display: none" hidden>
 							</div>
 							
 							
@@ -114,7 +123,7 @@
 						<div class="form-group row">
 							<div class="form-group col-md-3 col-sm-3 col-xs-12 ">
 								<label class="control-label" for="cnh">CNH</label>
-								<input type="cnh" id="cnh" class="form-control" name="cnh" v-mask="'#########-##'">	
+								<input type="cnh" id="cnh" class="form-control" name="cnh" maxlength="11">	
 							</div>
 
 							<div class="form-group col-md-2 col-sm-2 col-xs-12">
@@ -144,7 +153,7 @@
 							<div class="form-group col-md-9 col-sm-9 col-xs-12">
 								<label class="control-label" for="cargo_id">Cargo</label>
 								<select name = "cargo_id" id="cargo_id" class="form-control  selectpicker error" 
-									data-style="select-with-transition has-dourado">
+									data-style="select-with-transition has-dourado" required>
 									<option value=""> </option>
 									@foreach ($cargos as $cargo)
 										<option value="{{$cargo->id}}"> {{$cargo->cargo}} </option>
@@ -325,6 +334,7 @@
 @endsection
 
 @push("scripts")
+	<script src="{{ asset('js/vanillaMasker.min.js')}}"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			//botão de voltar
@@ -333,6 +343,47 @@
 				window.location.href = "{{ URL::route('agente.index') }}"; 
 			});
 		});
+	</script>
+	<script>
+		const wrapper = document.querySelector(".wrapper");
+		const fileName = document.querySelector(".file-name");
+		const defaultBtn = document.querySelector("#default-btn");
+		const customBtn = document.querySelector("#custom-btn");
+		const cancelBtn = document.querySelector("#cancel-btn i");
+		const img = document.querySelector(".img");
+		let regExp = /[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+		function defaultBtnActive(){
+		defaultBtn.click();
+		event.preventDefault();
+		}
+		defaultBtn.addEventListener("change", function(){
+		const file = this.files[0];
+		if(file){
+			const reader = new FileReader();
+			reader.onload = function(){
+			const result = reader.result;
+			img.src = result;
+			wrapper.classList.add("active");
+			}
+			cancelBtn.addEventListener("click", function(){
+			img.src = "";
+			wrapper.classList.remove("active");
+			})
+			reader.readAsDataURL(file);
+		}
+		if(this.value){
+			let valueStore = this.value.match(regExp);
+			fileName.textContent = valueStore;
+		}
+		});
+	</script>
+	<script>
+		VMasker($("#cpf")).maskPattern("999.999.999-99");
+		VMasker($("#matricula")).maskPattern("999.999");
+		VMasker($("#cep")).maskPattern("99.999-999");
+		VMasker($("#telefone1")).maskPattern("(99)99999-9999");
+		VMasker($("#telefone2")).maskPattern("(99)99999-9999");
+		VMasker($("#telefone3")).maskPattern("(99)99999-9999");
 	</script>
 @endpush
 

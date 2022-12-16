@@ -33,15 +33,14 @@
 					<div class="row">
 				 		<div class="form-group col-md-3 col-sm-3 col-xs-12">
                  		       <label class="control-label">Data</label>
-                 		       <input type="date" id="data" class="form-control" placeholder="data" name="data" minlength="4" maxlength="100"
-                 		      required >	
+                 		       <input type="date" id="data" class="form-control" placeholder="data" name="data" minlength="4" maxlength="100" value="{{$data_atual}}" required >	
                  		</div>
 
 						<div class="form-group col-md-3 col-sm-3 col-xs-12"></div>
 
 						<div class="form-group col-md-3 col-sm-3 col-xs-12 col-md-offset-3 col-sm-offset-3">
 							<label class="control-label">Hora</label>
-							<input type="time" id="hora" class="form-control" placeholder="hora" name="hora" minlength="4" maxlength="100"
+							<input type="time" id="hora" class="form-control" placeholder="hora" name="hora" minlength="4" maxlength="100" value="{{$hora_atual}}"
 						   required >	
 			 			</div>
 					</div>
@@ -51,7 +50,7 @@
 							<label class="control-label">Tipo</label>
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						required >	 --}}
-							<select name="tipo_id" id="tipo_id" class="form-control" required>
+							<select name="tipo_id" id="tipo_id" class="form-control">
 								<option value="">Selecione o Tipo</option>  
 								@foreach ($tipos as $tipo)
 									<option value="{{$tipo->id}}">{{$tipo->nome}}</option> 
@@ -63,7 +62,7 @@
 							<label class="control-label">Clima</label>
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						required >	 --}}
-							<select name="clima_id" id="clima_id" class="form-control" required>
+							<select name="clima_id" id="clima_id" class="form-control">
 								<option value="">Selecione o Clima</option>  
 								@foreach ($climas as $clima)
 									<option value="{{$clima->id}}">{{$clima->nome}}</option> 
@@ -75,7 +74,7 @@
 							<label class="control-label">Transportado</label>
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						required >	 --}}
-							<select name="transportado_id" id="transportado_id" class="form-control" required>
+							<select name="transportado_id" id="transportado_id" class="form-control">
 								<option value="">Selecione o Transportado</option>  
 								@foreach ($transportados as $transportado)
 									<option value="{{$transportado->id}}">{{$transportado->nome}}</option> 
@@ -89,8 +88,8 @@
 							<label class="control-label">Condução da Vitima</label>
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						   required >	 --}}
-							<select name="conducao_id" id="conducao_id" class="form-control" required>
-								<option value="">Selecione o Transportado</option>  
+							<select name="conducao_id" id="conducao_id" class="form-control">
+								<option value="">Selecione a Condução</option>  
 								@foreach ($conducoes as $conducao)
 									<option value="{{$conducao->id}}">{{$conducao->nome}}</option> 
 								@endforeach
@@ -102,7 +101,7 @@
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						   required >	 --}}
 						   	<select name="setor_id" id="setor_id" class="form-control" required>
-								<option value="">Selecione o Transportado</option>  
+								<option value="">Selecione o Setor</option>  
 								@foreach ($setores as $setor)
 									<option value="{{$setor->id}}">{{$setor->nome}}</option> 
 								@endforeach
@@ -110,19 +109,35 @@
 			 			</div>
 					</div>
 
+					<input type="text" name="latitude" id="latitude" hidden>
+					<input type="text" name="longitude" id="longitude" hidden>
+					<input type="text" name="municipio" id="municipio" hidden>
+
 					<div class="row">
+						
+						<div class="form-group col-md-2 col-sm-2 col-xs-12">
+							<p><b>Para pegar sua localização atual.</b></p>
+							{{-- <button type="button" onclick="getLocation()">Clique Aqui!</button> --}}
+
+							<button type="button" onclick="getLocation()" class="botoes-acao btn btn-round btn-primary" style="padding: 1px 12px !important;width: 100% " >
+								<span class="icone-botoes-acao mdi mdi-backburger"></span>   
+								<span class="texto-botoes-acao"> Clique Aqui! </span>
+								<div class="ripple-container"></div>
+							</button>
+						</div>
+
 						 <div class="form-group col-md-4 col-sm-4 col-xs-12">
 							<label class="control-label">CEP</label>
-							<input type="text" id="cep" class="form-control" placeholder="CEP" name="cep" minlength="4" maxlength="100"
-						    >	
+							<input type="text" id="cep" class="form-control" placeholder="CEP" name="cep" minlength="4" maxlength="100">	
 			 			</div>
 
-						 <div class="form-group col-md-8 col-sm-8 col-xs-12">
+						 <div class="form-group col-md-6 col-sm-6 col-xs-12">
 							<label class="control-label">Bairro</label>
 							<input type="text" id="bairro" class="form-control" placeholder="Bairro" name="bairro" minlength="4" maxlength="100"
 						    >	
 			 			</div>
-
+					</div>
+					<div class="row">
 						 <div class="form-group col-md-8 col-sm-8 col-xs-12">
 							<label class="control-label">Logradouro</label>
 							<input type="text" id="logradouro" class="form-control" placeholder="Logradouro" name="logradouro" minlength="4" maxlength="100"
@@ -148,7 +163,7 @@
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						   required >	 --}}
 						   	<select name="categoria_id[]" id="categoria_id" multiple class="form-control" required>
-								<option value="">Selecione o Transportado</option>  
+								<option value="">Selecione a Categoria(s)</option>  
 								@foreach ($categorias as $categoria)
 									<option value="{{$categoria->id}}">{{$categoria->nome}}</option> 
 								@endforeach
@@ -242,6 +257,72 @@
 @push("scripts")
 	<script src="{{ asset('js/tom-select.complete.min.js') }}"></script>
 	<script src="{{ asset('js/dropzone.min.js')}}"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key={{$key_maps}}" defer></script>
+
+	<script>
+		var x = document.getElementById("demo");
+		
+		function getLocation() {
+		  if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition);
+		  } else { 
+			x.innerHTML = "Geolocation is not supported by this browser.";
+		  }
+		}
+		
+		function showPosition(position) {
+			
+		document.querySelector("[name='latitude']").value = position.coords.latitude;
+		document.querySelector("[name='longitude']").value = position.coords.longitude;
+		
+		const geocoder = new google.maps.Geocoder();
+
+		const latlng = {
+			lat: position.coords.latitude,
+			// lat: -22.7828677,
+			lng: position.coords.longitude,
+			// lng: -43.4317243,
+		}
+
+		geocoder.geocode({location: latlng}).then((response) => {
+			if(response.results[0]){
+
+				// alert(response.results[0].formatted_address);
+				console.log(response.results[0].address_components);
+
+				for(let valor of response.results[0].address_components){
+					if(valor.types[0] === 'street_number'){
+
+						document.querySelector("[name='numero']").value = valor.long_name;
+
+					}else if (valor.types[0] === 'route') {
+
+						document.querySelector("[name='logradouro']").value = valor.long_name;
+
+					}else if (valor.types[0] === 'political') {
+
+						document.querySelector("[name='bairro']").value = valor.long_name;
+
+					}else if (valor.types[0] === 'administrative_area_level_2') {
+
+						// municipio
+						document.querySelector("[name='municipio']").value = valor.long_name;
+
+
+					}else if(valor.types[0] === 'postal_code'){
+						
+						document.querySelector("[name='cep']").value = valor.long_name;
+
+					}
+				}
+
+
+			}
+		})
+		}
+	</script>
+
+
 
 	<script type="text/javascript">
 		$(document).ready(function(){

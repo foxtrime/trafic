@@ -8,8 +8,10 @@ use App\Models\User;
 use App\Models\Cargo;
 use App\Models\Agente;
 use App\Models\Situacao;
-use Auth;
+use Carbon\Carbon;
 use DataTables;
+use Auth;
+
 
 
 
@@ -52,8 +54,6 @@ class AgenteController extends Controller
             
             $password = retiraMascaraCPF($request->cpf);
             $user->password 		= bcrypt($password);
-
-            // $user->foto
             
             $user->save();
 
@@ -61,14 +61,14 @@ class AgenteController extends Controller
             $agente->user_id         = $user->id;
             $agente->nome_servico    = $request->nome_servico;
             $agente->sexo            = $request->sexo;
-            $agente->nascimento      = $request->nascimento;
+            $agente->nascimento      = Carbon::parse($request->nascimento)->format('Y-m-d');
             $agente->cargo_id        = $request->cargo_id;
-            $agente->admissao        = $request->admissao;
+            $agente->admissao        = Carbon::parse($request->admissao)->format('Y-m-d');
 			$agente->matricula		 = $request->matricula;
             $agente->ts              = $request->ts;
             $agente->cnh             = $request->cnh;
             $agente->categoria_cnh   = $request->categoria_cnh;
-            $agente->validade_cnh    = $request->validade_cnh;
+            $agente->validade_cnh    = Carbon::parse($request->validade_cnh)->format('Y-m-d');
             $agente->municipio       = $request->municipio;
             $agente->bairro          = $request->bairro;
             $agente->logradouro      = $request->logradouro;
@@ -80,7 +80,6 @@ class AgenteController extends Controller
             $agente->telefone3       = $request->telefone3;
             $agente->obs             = $request->obs;
             $agente->situacao        = 'PRONTO';
-            $agente->foto            = $request->foto;
             $agente->altura          = $request->altura;
             $agente->camisa          = $request->camisa;
             $agente->peso            = $request->peso;
@@ -90,10 +89,17 @@ class AgenteController extends Controller
             $agente->coturno         = $request->coturno;
             $agente->colete          = $request->colete;
 
+
+			if($request->image != null){
+				$salva_file = $request->image->store('public/agentes');
+				$agente->foto  =  substr($salva_file, 15);
+			}
+
             $agente->save();
 
         } catch (\Throwable $th) {
 
+			// dd($th->errorInfo);
             return back()->withInput()->with('error', 'Falha ao criar o Agente.'); 
         }
         DB::commit();
@@ -212,9 +218,9 @@ class AgenteController extends Controller
 			};
 
 
-			$nome_servico = "<td class='dt-body-left ' > $agente->nome_servico";
+			$nome_servico = "<td class='dt-body-left'> $agente->nome_servico";
 			if($agente->foto){
-				$nome_servico = $nome_servico ."<img src='$agente->foto' style='width: 35px; height: 40px; float: right;'/> </td>"  ;
+				$nome_servico = $nome_servico ."<img src=storage/agentes/$agente->foto style='width: 35px; height: 40px; float: right;'/> </td>"  ;
 			}else{
 				$nome_servico = $nome_servico ."</td>";
 			}

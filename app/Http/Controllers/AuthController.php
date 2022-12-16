@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 use Auth;
 
 
@@ -31,7 +32,16 @@ class AuthController extends Controller
 		
 		if(Auth::attempt($credentials))
         {
-			return redirect()->intended('/');
+			$user = User::where('email', $request->email)->first();
+
+			if ( $user->can('LOGIN') ){
+				//se tiver a role inicia sistema
+				return redirect()->intended('/');
+			}
+
+			//se chegar até aqui é pq varreu o array de roles e não encontrou nenhuma associada ao usuário, então "desloga" e envia mensagem de erro
+			Auth::logout();
+			return redirect()->back()->with('erro','Voce não tem acesso ao sistema');
 			// dd($credentials);
         }else{
 			return redirect()->back()->with('error','Acesso Negado, Email ou senha invalida');

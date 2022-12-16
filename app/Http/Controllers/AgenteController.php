@@ -61,14 +61,14 @@ class AgenteController extends Controller
             $agente->user_id         = $user->id;
             $agente->nome_servico    = $request->nome_servico;
             $agente->sexo            = $request->sexo;
-            $agente->nascimento      = Carbon::parse($request->nascimento)->format('Y-m-d');
+            $agente->nascimento      = Carbon::createFromFormat('d/m/Y', $request->nascimento)->format('Y-m-d');
             $agente->cargo_id        = $request->cargo_id;
-            $agente->admissao        = Carbon::parse($request->admissao)->format('Y-m-d');
+            $agente->admissao        = Carbon::createFromFormat('d/m/Y', $request->admissao)->format('Y-m-d');
 			$agente->matricula		 = $request->matricula;
             $agente->ts              = $request->ts;
             $agente->cnh             = $request->cnh;
             $agente->categoria_cnh   = $request->categoria_cnh;
-            $agente->validade_cnh    = Carbon::parse($request->validade_cnh)->format('Y-m-d');
+            $agente->validade_cnh    = Carbon::createFromFormat('d/m/Y', $request->validade_cnh)->format('Y-m-d');
             $agente->municipio       = $request->municipio;
             $agente->bairro          = $request->bairro;
             $agente->logradouro      = $request->logradouro;

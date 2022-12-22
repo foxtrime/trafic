@@ -39,7 +39,7 @@
 									  <i class="fas fa-times"></i>
 								   </div>
 								   <div class="file-name">
-									  File name here
+									  Nome do arquivo
 								   </div>
 								</div>
 								<button onclick="defaultBtnActive()" id="custom-btn">Escolha uma Imagem</button>
@@ -359,7 +359,7 @@
 			$('#nome_servico').keyup(function() {
 				this.value = this.value.toLocaleUpperCase();
 			});
-			
+
 		});
 	</script>
 	<script>

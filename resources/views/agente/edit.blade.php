@@ -12,15 +12,20 @@
 
 		<div class="x_panel ">
 			<div class="x_content">
-				<form id="frm_guarda" class="form-horizontal form-label-left" method="post" enctype="multipart/form-data" action="{{ route('agente.store') }}">
+				<form id="frm_guarda" class="form-horizontal form-label-left" method="post" enctype="multipart/form-data" action="{{ action('AgenteController@update', $agente->id) }}">
 					{{ csrf_field()}} 
+                    @method('PATCH')
 
 					<div id="desabilita">
 						<div class="form-group row">
 							<div class="col-md-3 col-sm-3" style="float: left!important">
 								<div class="wrapper">
 								   <div class="image">
-									  <img class="img" >
+                                        @if (isset($agente->foto))
+                                            <img class="img" src="{{asset('storage/agentes/'.$agente->foto)}}">  
+                                        @else
+                                            <img class="img" >
+                                        @endif
 								   </div>
 								   <div class="content">
 									  <div class="icon" style="padding-left: 45%;">
@@ -41,38 +46,41 @@
 								<input id="default-btn" name="image" type="file" style="display: none" hidden>
 							</div>
 							
-							
+
+							<input type="text" name="user_id" id="user_id" value="{{$agente->user_id}}" hidden>
+
 							<div class=" form-group col-md-9 col-sm-9 col-xs-12">
 								<label class="control-label" >Nome</label>
-								<input type="text" id="nome" class="form-control " name="nome" minlength="4" maxlength="100" required >	
+								<input type="text" id="nome" class="form-control " name="nome" minlength="4" maxlength="100" required value="{{$agente->usuario->name}}">	
 							</div>
 			
 
 							<div class=" form-group col-md-4 col-sm-4 col-xs-12">
 								<label class="control-label" >Nome de Serviço</label>
-								<input type="text" id="nome_servico" class="form-control " name="nome_servico" minlength="4" maxlength="100" required >	
+								<input type="text" id="nome_servico" class="form-control " name="nome_servico" minlength="4" maxlength="100" required value="{{$agente->nome_servico}}">	
 							</div>
 							
 							<div class="form-group col-md-2 col-sm-2 col-xs-12 ">
 								<label class="control-label" for="admissao">Admissão</label>
-								<input type="date" id="admissao" class="form-control datas_input" name="admissao">
+								<input type="date" id="admissao" class="form-control datas_input" name="admissao" value="{{$agente->admissao}}">
 							</div>
 
 							<div class="form-group col-md-3 col-sm-3 col-xs-12 ">
 								<label class="control-label" for="matricula">Matrícula</label>
-								<input type="matricula" id="matricula" class="form-control" name="matricula">	
+								<input type="matricula" id="matricula" class="form-control" name="matricula" value="{{$agente->matricula}}">	
 							</div>
 							
 							<div class="form-group col-md-2 col-sm-2 col-xs-12 ">
 								<label class="control-label" for="nascimento">Nascimento</label>
-								<input type="date" id="nascimento" 	class="form-control datas_input" name="nascimento">
+								<input type="date" id="nascimento" 	class="form-control datas_input" name="nascimento" v-mask="'##/##/####'" value="{{ $agente->nascimento }}">
+								
 							</div>
 
 							<div class="form-group col-md-2 col-sm-2 col-xs-12">
 								<label class="control-label" for="sexo">Sexo</label>
 								<select name = "sexo" id="sexo" class="form-control  selectpicker error" 
 									data-style="select-with-transition has-dourado" required >
-									<option value=""></option>
+									<option selected value="{{$agente->sexo}}">{{$agente->sexo}}</option>
                                     <option value="Masculino"> Masculino </option>
                                     <option value="Feminino"> Feminino </option>
 								</select>
@@ -82,7 +90,7 @@
 								<label class="control-label" for="ts">Tipo Sang.</label>
 								<select name = "ts" id="ts" class="form-control  selectpicker error" 
 									data-style="select-with-transition has-dourado"  >
-									<option value=""></option>
+									<option selected value="{{$agente->ts}}">{{$agente->ts}}</option>
 									    
                                     <option value="A+"> A+ </option>
                                     <option value="A-"> A- </option>
@@ -99,7 +107,7 @@
 								<label class="control-label" for="tipo">Tipo</label>
 								<select name="tipo" id="tipo" class="form-control  selectpicker error" 
 									data-style="select-with-transition has-dourado" required >
-									<option value=""></option>
+									<option selected value="{{$agente->usuario->tipo}}">{{$agente->usuario->tipo}}</option>
                                     <option value="Efetivo"> Efetivo </option>
                                     <option value="Comissionado"> Comissionado </option>
                                     <option value="Externo"> Externo </option>
@@ -111,26 +119,26 @@
 						<div class="form-group row">
 							<div class="form-group col-md-3 col-sm-3 col-xs-12 ">
 								<label class="control-label" for="cpf">CPF</label>
-									<input type="cpf" id="cpf" class="form-control" name="cpf" required>	
+									<input type="cpf" id="cpf" class="form-control" name="cpf" value="{{$agente->usuario->cpf}}" required>	
 							</div>
 							
 							<div class="form-group col-md-6 col-sm-6 col-xs-12 ">
 								<label class="control-label" for="email">Email</label>
-								<input type="email" id="email" class="form-control" name="email" required>	
+								<input type="email" id="email" class="form-control" name="email" value="{{$agente->usuario->email}}" disabled required>	
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<div class="form-group col-md-3 col-sm-3 col-xs-12 ">
 								<label class="control-label" for="cnh">CNH</label>
-								<input type="cnh" id="cnh" class="form-control" name="cnh" maxlength="11">	
+								<input type="cnh" id="cnh" class="form-control" name="cnh" maxlength="11" value="{{$agente->cnh}}">	
 							</div>
 
 							<div class="form-group col-md-2 col-sm-2 col-xs-12">
 								<label class="control-label" for="categoria_cnh">Cat. CNH</label>
 								<select name = "categoria_cnh" id="categoria_cnh" class="form-control  selectpicker error" 
 									data-style="select-with-transition has-dourado"  >
-									<option value=""></option>
+									<option selected value="{{$agente->categoria_cnh}}">{{$agente->categoria_cnh}}</option>
                                     <option value="A"> A </option>
                                     <option value="B"> B </option>
                                     <option value="C"> C </option>
@@ -145,7 +153,8 @@
 
 							<div class="form-group col-md-2 col-sm-2 col-xs-12 ">
 								<label class="control-label" for="validade_cnh">Validade</label>
-								<input type="date" id="validade_cnh" 	class="form-control datas_input" name="validade_cnh">
+								<input type="date" id="validade_cnh" class="form-control datas_input" name="validade_cnh" value="{{$agente->validade_cnh }}">
+								
 							</div>
 						</div>
 
@@ -154,7 +163,7 @@
 								<label class="control-label" for="cargo_id">Cargo</label>
 								<select name = "cargo_id" id="cargo_id" class="form-control  selectpicker error" 
 									data-style="select-with-transition has-dourado" required>
-									<option value=""> </option>
+									<option required value="{{$agente->cargo_id}}">{{$agente->cargo->cargo}} </option>
 									@foreach ($cargos as $cargo)
 										<option value="{{$cargo->id}}"> {{$cargo->cargo}} </option>
 									@endforeach
@@ -171,53 +180,53 @@
 						<div class="form-group row">
 							<div class="form-group col-md-2">
 								<label class="col-md-1 control-label" for="cep">CEP</label>
-								<input id="cep" name="cep" type="text"  class="form-control"  v-mask="'##.###-###'" >
+								<input id="cep" name="cep" type="text"  class="form-control" value="{{$agente->cep}}" >
 							</div>
 							
 							<div class="form-group col-md-5">
 								<label class="col-md-1 control-label" for="municipio">Município</label>
-								<input id="municipio" name="municipio" type="text"  class="form-control" minlength="4" maxlength="30">
+								<input id="municipio" name="municipio" type="text"  class="form-control" minlength="4" maxlength="30" value="{{$agente->municipio}}">
 							</div>
 							
 							<div class="form-group col-md-5">
 								<label class="col-md-1 control-label" for="bairro">Bairro</label>
-								<input id="bairro" name="bairro" type="text"  class="form-control" minlength="4" maxlength="30">
+								<input id="bairro" name="bairro" type="text"  class="form-control" minlength="4" maxlength="30" value="{{$agente->bairro}}">
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<div class="form-group col-md-6">
 									<label class="col-md-1 control-label" for="logradouro">Logradouro</label>
-									<input id="logradouro" name="logradouro" type="text" class="form-control" minlength="4" maxlength="100">
+									<input id="logradouro" name="logradouro" type="text" class="form-control" minlength="4" maxlength="100" value="{{$agente->logradouro}}">
 								</div>
 						
 								<div class="form-group col-md-2">
 									<label class="col-md-1 control-label" for="numero">Numero</label>
-									<input id="numero" name="numero" type="text" class="form-control">
+									<input id="numero" name="numero" type="text" class="form-control" value="{{$agente->numero}}">
 								</div>
 						
 								<div class="form-group  col-md-4">
 									<label class="col-md-1 control-label" for="complemento">Complemento</label>
-									<input id="complemento" name="complemento" type="text" class="form-control" maxlength="100">
+									<input id="complemento" name="complemento" type="text" class="form-control" maxlength="100" value="{{$agente->complemento}}">
 								</div>
 						</div>
 						<div class="form-group row">
 							<div class="form-group col-md-3 col-sm-3 col-xs-12 ">
 								<label class="control-label" for="telefone1">Telefone 1</label>
 								<input type="text" id="telefone1" class="form-control" name="telefone1" 
-									minlength="9" maxlength="15" v-mask="['(##) ####-####', '(##) #####-####']">		
+									minlength="9" maxlength="15" value="{{$agente->telefone1}}">		
 							</div>
 						
 							<div class="form-group col-md-3 col-sm-3 col-xs-12 ">
 								<label class="control-label" for="telefone2">Telefone 2</label>
 								<input type="text" id="telefone2" class="form-control" name="telefone2" 
-									minlength="9" maxlength="15" v-mask="['(##) ####-####', '(##) #####-####']" >		
+									minlength="9" maxlength="15"  value="{{$agente->telefone2}}">		
 							</div>
 						
 							<div class="form-group col-md-3 col-sm-3 col-xs-12 ">
 								<label class="control-label" for="telefone3">Telefone 3</label>
 								<input type="text" id="telefone3" class="form-control" name="telefone3" 
-									minlength="9" maxlength="15" v-mask="['(##) ####-####', '(##) #####-####']">		
+									minlength="9" maxlength="15" value="{{$agente->telefone3}}">		
 							</div>
 						</div>
 						
@@ -230,32 +239,32 @@
 						<div class="form-group row">
 							<div class=" form-group col-md-2 col-sm-2 col-xs-12">
 								<label class="control-label" >Altura</label>
-								<input type="number" id="altura" class="form-control dois_digitos" name="altura" minlength="1" maxlength="3"  step="0.01">	
+								<input type="number" id="altura" class="form-control dois_digitos" name="altura" minlength="1" maxlength="3"  step="0.01" value="{{$agente->altura}}">	
 							</div>
 			
 							<div class=" form-group col-md-2 col-sm-2 col-xs-12">
 								<label class="control-label" >Peso</label>
-								<input type="number" id="peso" class="form-control dois_digitos" name="peso" minlength="40" maxlength="200" step="0.01">	
+								<input type="number" id="peso" class="form-control dois_digitos" name="peso" minlength="40" maxlength="200" step="0.01" value="{{$agente->altura}}">	
 							</div>
 			
 							<div class=" form-group col-md-2 col-sm-2 col-xs-12">
 								<label class="control-label" >Calça</label>
-								<input type="number" id="calca" class="form-control" name="calca" step="1">	
+								<input type="number" id="calca" class="form-control" name="calca" step="1" value="{{$agente->calca}}">	
 							</div>
 			
 							<div class=" form-group col-md-2 col-sm-2 col-xs-12">
 								<label class="control-label" >Sapato</label>
-								<input type="number" id="sapato" class="form-control" name="sapato" step="1">	
+								<input type="number" id="sapato" class="form-control" name="sapato" step="1" value="{{$agente->sapato}}">	
 							</div>
 							
 							<div class=" form-group col-md-2 col-sm-2 col-xs-12">
 								<label class="control-label" >Tênis</label>
-								<input type="number" id="tenis" class="form-control" name="tenis" step="1">	
+								<input type="number" id="tenis" class="form-control" name="tenis" step="1" value="{{$agente->tenis}}">	
 							</div>
 							
 							<div class=" form-group col-md-2 col-sm-2 col-xs-12">
 								<label class="control-label" >Coturno</label>
-								<input type="number" id="coturno" class="form-control" name="coturno" step="1">	
+								<input type="number" id="coturno" class="form-control" name="coturno" step="1" value="{{$agente->coturno}}">	
 							</div>
 							
 							<div class=" form-group col-md-2 col-sm-2 col-xs-12">
@@ -263,7 +272,7 @@
 								{{-- <input type="text" id="camisa" class="form-control" name="camisa" minlength="1" maxlength="3">	 --}}
                                 <select name="camisa" id="camisa" class="form-control  selectpicker error" 
 									data-style="select-with-transition has-dourado">
-									<option value=""></option>
+									<option selected value="{{$agente->camisa}}">{{$agente->camisa}}</option>
                                     <option value="PP"> PP </option>
                                     <option value="P"> P </option>
                                     <option value="M"> M </option>
@@ -278,7 +287,7 @@
 								{{-- <input type="text" id="colete" class="form-control" name="colete" minlength="1" maxlength="3">	 --}}
                                 <select name="colete" id="colete" class="form-control  selectpicker error" 
 									data-style="select-with-transition has-dourado">
-									<option value=""></option>
+									<option value="{{$agente->colete}}"> {{$agente->colete}}</option>
                                     <option value="PP"> PP </option>
                                     <option value="P"> P </option>
                                     <option value="M"> M </option>
@@ -301,7 +310,7 @@
 							<div class="form-group col-md-12 col-sm-12 col-xs-12 ">
 								<label class="control-label" for="obs">Observação</label>
 								<textarea rows="4" cols="50" id="obs" class="form-control" 
-									name="obs"> </textarea>
+									name="obs">{{$agente->obs}} </textarea>
 							</div>
 						</div>
 					</div>
@@ -393,9 +402,6 @@
 		VMasker($("#telefone1")).maskPattern("(99)99999-9999");
 		VMasker($("#telefone2")).maskPattern("(99)99999-9999");
 		VMasker($("#telefone3")).maskPattern("(99)99999-9999");
-
-		
-
 	</script>
 @endpush
 

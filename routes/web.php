@@ -11,7 +11,8 @@ Route::get ('/logout', 		'AuthController@logout')->name('logout');
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get ('/', 							'HomeController@index')->name('home');
-    
+    Route::get ('/alterasenha',					'UserController@AlteraSenha');
+	Route::post('/salvasenha',   				'UserController@SalvarSenha');
     
     
     

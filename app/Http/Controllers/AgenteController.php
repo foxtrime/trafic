@@ -61,14 +61,14 @@ class AgenteController extends Controller
             $agente->user_id         = $user->id;
             $agente->nome_servico    = $request->nome_servico;
             $agente->sexo            = $request->sexo;
-            $agente->nascimento      = Carbon::createFromFormat('d/m/Y', $request->nascimento)->format('Y-m-d');
+			$agente->nascimento      = Carbon::parse($request->nascimento)->format('Y-m-d');
             $agente->cargo_id        = $request->cargo_id;
-            $agente->admissao        = Carbon::createFromFormat('d/m/Y', $request->admissao)->format('Y-m-d');
+            $agente->admissao        = Carbon::parse( $request->admissao)->format('Y-m-d');
 			$agente->matricula		 = $request->matricula;
             $agente->ts              = $request->ts;
             $agente->cnh             = $request->cnh;
             $agente->categoria_cnh   = $request->categoria_cnh;
-            $agente->validade_cnh    = Carbon::createFromFormat('d/m/Y', $request->validade_cnh)->format('Y-m-d');
+            $agente->validade_cnh    = Carbon::parse($request->validade_cnh)->format('Y-m-d');
             $agente->municipio       = $request->municipio;
             $agente->bairro          = $request->bairro;
             $agente->logradouro      = $request->logradouro;
@@ -106,6 +106,74 @@ class AgenteController extends Controller
 
         return redirect('agente')->with('sucesso', 'Agente criado com sucesso!');
     }
+
+
+	public function edit($id)
+	{
+		$cargos = Cargo::all();
+		$agente = Agente::with('cargo')->find($id);
+
+		return view('agente.edit',compact('agente','cargos'));
+	}
+
+	public function update(Request $request, $id)
+	{
+		// dd($request->all());
+		$agente = Agente::find($id);
+		$agente->nome_servico    = $request->nome_servico;
+		$agente->sexo            = $request->sexo;
+		$agente->nascimento      = Carbon::parse($request->nascimento)->format('Y-m-d');
+		$agente->cargo_id        = $request->cargo_id;
+		$agente->admissao        = Carbon::parse( $request->admissao)->format('Y-m-d');
+		$agente->matricula		 = $request->matricula;
+		$agente->ts              = $request->ts;
+		$agente->cnh             = $request->cnh;
+		$agente->categoria_cnh   = $request->categoria_cnh;
+		$agente->validade_cnh    = Carbon::parse($request->validade_cnh)->format('Y-m-d');
+		$agente->municipio       = $request->municipio;
+		$agente->bairro          = $request->bairro;
+		$agente->logradouro      = $request->logradouro;
+		$agente->numero          = $request->numero;
+		$agente->complemento     = $request->complemento;
+		$agente->cep             = $request->cep;
+		$agente->telefone1       = $request->telefone1;
+		$agente->telefone2       = $request->telefone2;
+		$agente->telefone3       = $request->telefone3;
+		$agente->obs             = $request->obs;
+		$agente->altura          = $request->altura;
+		$agente->camisa          = $request->camisa;
+		$agente->peso            = $request->peso;
+		$agente->calca           = $request->calca;
+		$agente->sapato          = $request->sapato;
+		$agente->tenis           = $request->tenis;
+		$agente->coturno         = $request->coturno;
+		$agente->colete          = $request->colete;
+
+		if($request->image != null){
+			$salva_file = $request->image->store('public/agentes');
+			$agente->foto  =  substr($salva_file, 15);
+		}
+
+		$agente->save();
+
+		$user = User::find($request->user_id);
+
+		$user->name     = $request->nome;
+		$user->cpf      = $request->cpf;
+		$user->tipo     = $request->tipo;
+
+		$user->save();
+
+		// DB::beginTransaction();
+		// try{
+
+		// } catch (\Throwable $th) {
+
+		// }
+		// DB::commit();
+
+		return redirect('agente')->with('sucesso', 'Agente Atualizado com sucesso!');
+	}
 
     public function tabela($situacao)
     {
@@ -172,21 +240,21 @@ class AgenteController extends Controller
 			// 							." <i class='glyphicon glyphicon-eye-open'></i></a> ";
 
 
-			// $btn_edita	= "<a href='" .url("guarda/$guarda->id/edit")."' " 
-			// 						." id='btn_edita_guarda'" 
-			// 						." class='btn btn-warning btn-xs action botao_acao' " 
-			// 						." data-toggle='tooltip' data-placement='bottom' " ;
+			$btn_edita	= "<a href='" .url("agente/$agente->id/edit")."' " 
+									." id='btn_edita_agente'" 
+									." class='btn btn-warning btn-xs action botao_acao' " 
+									." data-toggle='tooltip' data-placement='bottom' " ;
 									
-			// 						if( $logado->hasPermissionTo('GERIR RH') ){
-			// 							$btn_edita = $btn_edita ." data-desabilitado = 'false' ";
-			// 						}elseif ( $logado->id == $guarda->funcionario_id ) {
-			// 							$btn_edita = $btn_edita ." data-desabilitado = 'false' ";
-			// 						}else{
-			// 							$btn_edita = $btn_edita ." data-desabilitado = 'true' disabled ";
-			// 						}
+									// if( $logado->hasPermissionTo('GERIR RH') ){
+									// 	$btn_edita = $btn_edita ." data-desabilitado = 'false' ";
+									// }elseif ( $logado->id == $agente->funcionario_id ) {
+									// 	$btn_edita = $btn_edita ." data-desabilitado = 'false' ";
+									// }else{
+									// 	$btn_edita = $btn_edita ." data-desabilitado = 'true' disabled ";
+									// }
 
-			// 						$btn_edita = $btn_edita ." title='Edita Guarda'> "  
-			// 							." <i class='glyphicon glyphicon-pencil'></i></a>";
+									$btn_edita = $btn_edita ." title='Edita Guarda'> "  
+										." <i class='glyphicon glyphicon-pencil'></i></a>";
 
 
 			// 	$btn_print	= " <a  " 
@@ -208,6 +276,7 @@ class AgenteController extends Controller
 		
 			
 			// $acoes = $acoes  .$btn_capacitacao .$btn_alteracao  .$btn_situacao .$btn_visualiza  .$btn_edita .$btn_print;
+			$acoes = $acoes  .$btn_edita;
 			
 
 			if (isset($agente->responsavel )) 

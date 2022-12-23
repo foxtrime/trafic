@@ -139,9 +139,30 @@ class OcorrenciaController extends Controller
     
     }
     
-    public function edit($id){
+    public function edit($id)
+    {
 
-        return view('ocorrencia.edit');
+        $ocorrencia = Ocorrencia::find($id);
+
+        $key_maps = env('MAPS_SECRET_KEY', '');
+
+        $agentes = Agente::with('usuario')->where('user_id','!=', Auth::user()->id)->get();
+
+        $atendimentos = ConfigAtendimento::all();
+        $categorias = ConfigCategoria::all();
+        $climas = ConfigClima::all();
+        $conducoes = ConfigConducao::all();
+        $setores = ConfigSetor::all();
+        $tipos = ConfigTipo::all();
+        $transportados = ConfigTransportado::all();
+
+        return view('ocorrencia.edit' , compact('ocorrencia','atendimentos','categorias','climas','conducoes','setores','tipos','transportados','agentes','key_maps'));
+    }
+
+    public function update(Request $request, $id)
+    {
+
+
     }
 
     public function show($id)
@@ -338,6 +359,11 @@ class OcorrenciaController extends Controller
         
         return DataTables::of($colecao)->rawColumns(['acoes'])->make(true);
 
+     }
+
+     public function pdf($id)
+     {
+        
      }
   
 }

@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('ocorrencia/image',                     'OcorrenciaController@storeImage')->name('ocorrencia.storeImage');
     Route::post('ocorrencia/enviaformulario',			'OcorrenciaController@envia');
     Route::delete('ocorrencia/deleteimg/{id}',          'OcorrenciaController@deleteimg');
+    Route::get('ocorrencia/pdf/{id}',					'OcorrenciaController@imprimir');
     
 
     //========================================================================================

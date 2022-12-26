@@ -22,6 +22,7 @@ use App\Models\Sequencia;
 use Carbon\Carbon;
 use DataTables;
 use Auth;
+use PDF;
 
 class OcorrenciaController extends Controller
 {
@@ -391,7 +392,7 @@ class OcorrenciaController extends Controller
 				        <i class='glyphicon glyphicon-eye-open'></i>
                     </a>
 				    
-				    <a href='".$ocorrencia->id."' 
+				    <a href='".action('OcorrenciaController@imprimir', $ocorrencia->id)."' 
 				        class='btn btn-info btn-xs action botao_acao btn_imprimir'
 				        data-toggle='tooltip' data-placement='bottom' title='Imprimir Ocorrencia'>
 				        <i class='glyphicon glyphicon-print'></i>
@@ -421,9 +422,16 @@ class OcorrenciaController extends Controller
 
      }
 
-     public function pdf($id)
+     public function imprimir($id)
      {
-        
+        $ocorrencia = Ocorrencia::find($id);
+		
+		$imagens = $ocorrencia->imagens;
+
+		// dd($imagens);
+		$pdf = PDF::loadView('ocorrencia/pdf',compact('ocorrencia','imagens'));
+		
+		return $pdf->stream('Ocorrencia.pdf');
      }
   
 }

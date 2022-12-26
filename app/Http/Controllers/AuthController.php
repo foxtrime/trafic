@@ -41,7 +41,7 @@ class AuthController extends Controller
 
 			//se chegar até aqui é pq varreu o array de roles e não encontrou nenhuma associada ao usuário, então "desloga" e envia mensagem de erro
 			Auth::logout();
-			return redirect()->back()->with('erro','Voce não tem acesso ao sistema');
+			return redirect()->back()->with('error','Voce não tem acesso ao sistema');
 			// dd($credentials);
         }else{
 			return redirect()->back()->with('error','Acesso Negado, Email ou senha invalida');

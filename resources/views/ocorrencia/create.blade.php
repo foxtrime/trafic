@@ -197,7 +197,7 @@
 						<div class="row">
 							<div class=" form-group col-md-12 col-sm-12 col-xs-12">
 								<label class="control-label" >Adicionar Integrantes na Ocorrência</label>
-								<select name="agentes_id[]" id="agentes_id" multiple class="form-control" required>
+								<select name="agentes_id[]" id="agentes_id" multiple class="form-control">
 									<option value="">Adicionar agente</option>  
 									@foreach ($agentes as $agente)
 										<option value="{{$agente->id}}"> {{$agente->nome_servico}} - {{$agente->usuario->name}} </option> 

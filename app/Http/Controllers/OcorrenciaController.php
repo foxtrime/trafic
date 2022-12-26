@@ -80,6 +80,7 @@ class OcorrenciaController extends Controller
 
         $ocorrencia->latitude           =  $request->latitude;
         $ocorrencia->longitude          =  $request->longitude;
+        $ocorrencia->municipio          =  $request->municipio;
         
 
         $ocorrencia->sequencia          = 'XXX';
@@ -128,11 +129,13 @@ class OcorrenciaController extends Controller
 		);
 
 		// SALVA QUE NÃO É O RELATOR
-		foreach($agente_arr as $key => $agente){
-			DB::table('ocorrencias_agentes')->insert(
-				['agente_id' => $agente ,'relator' => false,'ocorrencia_id' => $ocorrencia->id]
-			);
-		}
+        if($agente_arr > 0){
+            foreach($agente_arr as $key => $agente){
+                DB::table('ocorrencias_agentes')->insert(
+                    ['agente_id' => $agente ,'relator' => false,'ocorrencia_id' => $ocorrencia->id]
+                );
+            }
+        }
 
          return redirect()->route('ocorrencia.index');
 
@@ -142,8 +145,8 @@ class OcorrenciaController extends Controller
     public function edit($id)
     {
 
-        $ocorrencia = Ocorrencia::find($id);
-
+        $ocorrencia = Ocorrencia::with('categorias')->find($id);
+    
         $key_maps = env('MAPS_SECRET_KEY', '');
 
         $agentes = Agente::with('usuario')->where('user_id','!=', Auth::user()->id)->get();
@@ -162,7 +165,64 @@ class OcorrenciaController extends Controller
     public function update(Request $request, $id)
     {
 
+        // dd($request->all());
+        $ocorrencia = Ocorrencia::find($id);
 
+        $ocorrencia->data               = Carbon::parse($request->data)->format('Y-m-d');
+        $ocorrencia->hora               = $request->hora;
+        $ocorrencia->atendimento_id     = $request->atendimento_id;
+        $ocorrencia->tipo_id            = $request->tipo_id;
+        $ocorrencia->clima_id           = $request->clima_id;
+        $ocorrencia->transportado_id    = $request->transportado_id;
+        $ocorrencia->conducao_id        = $request->conducao_id;
+        $ocorrencia->setor_id           = $request->setor_id;
+        $ocorrencia->cep                = $request->cep;
+        $ocorrencia->bairro             = $request->bairro;
+        $ocorrencia->logradouro         = $request->logradouro;
+        $ocorrencia->numero             = $request->numero;
+        $ocorrencia->complemento        = $request->complemento;
+        $ocorrencia->envolvidos         = $request->envolvidos;
+        $ocorrencia->relato             = $request->relato;
+        $ocorrencia->providencia        = $request->providencia;
+
+        $ocorrencia->latitude           =  $request->latitude;
+        $ocorrencia->longitude          =  $request->longitude;
+        $ocorrencia->municipio          =  $request->municipio;
+
+        $ocorrencia->save();
+
+        // PEGA O ARRAY DE AGENTES
+        $agente_arr = $request->agentes_id;
+        $ocorrencia->agentes()->sync($agente_arr, ['relator' => false]);
+
+        DB::table('ocorrencias_agentes')->insert(
+			['agente_id' => agenteLogado()->id ,'relator' => true,'ocorrencia_id' => $ocorrencia->id]
+		);
+
+
+        if(isset($request->imagens)){
+			$imagens_ids = [];
+
+			foreach($request->imagens as $imagem){
+				if($imagem !== null){
+					$img = Ocorrencia_Images::create([
+						'ocorrencia_id'	=> $ocorrencia->id,
+						'image' 			=> $imagem,
+					]);
+					$imagens_ids[] = $img->id;
+				}
+			}
+		}
+
+        foreach($request->input('imagens', []) as $file){
+            $pasta_tmp = storage_path('app/public/ocorrencia/tmp/'.$file);
+
+            $pasta_definitiva = storage_path('app/public/ocorrencia/'.$file);
+
+            rename($pasta_tmp, $pasta_definitiva);
+         }
+
+         return redirect(url('/ocorrencia'));
     }
 
     public function show($id)

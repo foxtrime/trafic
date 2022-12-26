@@ -52,7 +52,12 @@
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						required >	 --}}
 							<select name="tipo_id" id="tipo_id" class="form-control">
-								<option value="{{$ocorrencia->tipo_id}}">{{$ocorrencia->tipo->nome}}</option>  
+								@if (isset($ocorrencia->tipo_id))
+									<option value="{{$ocorrencia->tipo_id}}" selected>{{$ocorrencia->tipo->nome}}</option>
+								@else
+									<option value="">Selecione o Tipo</option>  
+								@endif
+
 								@foreach ($tipos as $tipo)
 									<option value="{{$tipo->id}}">{{$tipo->nome}}</option> 
 								@endforeach
@@ -64,10 +69,17 @@
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						required >	 --}}
 							<select name="clima_id" id="clima_id" class="form-control">
-								<option value="">Selecione o Clima</option>  
+								
+								@if (isset($ocorrencia->clima_id))
+									<option value="{{$ocorrencia->clima_id}}" selected>{{$ocorrencia->clima->nome}}</option>
+								@else
+									<option value="">Selecione o Clima</option>  
+								@endif
+
 								@foreach ($climas as $clima)
 									<option value="{{$clima->id}}">{{$clima->nome}}</option> 
 								@endforeach
+							
 							</select>
 						</div>
 
@@ -76,7 +88,13 @@
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						required >	 --}}
 							<select name="transportado_id" id="transportado_id" class="form-control">
-								<option value="">Selecione o Transportado</option>  
+							
+								@if (isset($ocorrencia->transportado_id))
+									<option value="{{$ocorrencia->transportado_id}}" selected>{{$ocorrencia->transportado->nome}}</option>
+								@else
+									<option value="">Selecione o Transportado</option>    
+								@endif
+
 								@foreach ($transportados as $transportado)
 									<option value="{{$transportado->id}}">{{$transportado->nome}}</option> 
 								@endforeach
@@ -90,7 +108,12 @@
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						   required >	 --}}
 							<select name="conducao_id" id="conducao_id" class="form-control">
-								<option value="">Selecione a Condução</option>  
+								@if (isset($ocorrencia->conducao_id))
+									<option value="{{$ocorrencia->conducao_id}}" selected>{{$ocorrencia->conducao->nome}}</option>
+								@else
+									<option value="">Selecione a Condução</option>   
+								@endif
+
 								@foreach ($conducoes as $conducao)
 									<option value="{{$conducao->id}}">{{$conducao->nome}}</option> 
 								@endforeach
@@ -102,7 +125,13 @@
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						   required >	 --}}
 						   	<select name="setor_id" id="setor_id" class="form-control" required>
-								<option value="">Selecione o Setor</option>  
+								
+								@if (isset($ocorrencia->setor_id))
+									<option value="{{$ocorrencia->setor_id}}" selected>{{$ocorrencia->setor->nome}}</option>
+								@else
+									<option value="">Selecione o Setor</option>   
+								@endif
+
 								@foreach ($setores as $setor)
 									<option value="{{$setor->id}}">{{$setor->nome}}</option> 
 								@endforeach
@@ -110,9 +139,9 @@
 			 			</div>
 					</div>
 
-					<input type="text" name="latitude" id="latitude" hidden>
-					<input type="text" name="longitude" id="longitude" hidden>
-					<input type="text" name="municipio" id="municipio" hidden>
+					<input type="text" name="latitude" id="latitude" @if(isset($ocorrencia->latitude)) value="{{$ocorrencia->latitude}}" @endif hidden>
+					<input type="text" name="longitude" id="longitude" @if(isset($ocorrencia->longitude)) value="{{$ocorrencia->longitude}}" @endif hidden>
+					<input type="text" name="municipio" id="municipio" @if(isset($ocorrencia->municipio)) value="{{$ocorrencia->municipio}}" @endif hidden>
 
 					<div class="row">
 						
@@ -160,10 +189,16 @@
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						   required >	 --}}
 						   	<select name="categoria_id[]" id="categoria_id" multiple class="form-control" required>
-								<option value="">Selecione a Categoria(s)</option>  
+
 								@foreach ($categorias as $categoria)
-									<option value="{{$categoria->id}}">{{$categoria->nome}}</option> 
+									<option value="{{$categoria->id}}" 
+										@foreach ($ocorrencia->categorias as $v_categoria) 
+											@if ($categoria->id == $v_categoria->id) 
+												selected @break 
+											@endif 
+										@endforeach>{{$categoria->nome}}</option> 
 								@endforeach
+
 							</select>
 			 			</div>
 					
@@ -171,7 +206,7 @@
 						 <div class="row">
 							<div class="form-group col-md-12 col-sm-12 col-xs-12">
 								<label class="control-label" for="envolvidos">Envolvidos</label>
-								<textarea name="envolvidos" id="envolvidos" type="text" class="form-control" rows="3" required></textarea>
+								<textarea name="envolvidos" id="envolvidos" type="text" class="form-control" rows="3" required>{{$ocorrencia->envolvidos}}</textarea>
 							</div>
 						</div>
 						
@@ -179,14 +214,14 @@
 						<div class="row">
 							<div class="form-group col-md-12 col-sm-12 col-xs-12">
 								<label class="control-label" for="relato">Relato Sucinto</label>
-								<textarea name="relato" id="relato" type="text" class="form-control" rows="3" required></textarea>
+								<textarea name="relato" id="relato" type="text" class="form-control" rows="3" required>{{$ocorrencia->relato}}</textarea>
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="form-group col-md-12 col-sm-12 col-xs-12">
 								<label class="control-label" for="providencia">Providências Adotadas</label>
-								<textarea name="providencia" id="providencia" type="text" class="form-control" rows="3" required></textarea>
+								<textarea name="providencia" id="providencia" type="text" class="form-control" rows="3" required>{{$ocorrencia->providencia}}</textarea>
 							</div>
 						</div>
 
@@ -194,17 +229,56 @@
 						<div class="row">
 							<div class=" form-group col-md-12 col-sm-12 col-xs-12">
 								<label class="control-label" >Adicionar Integrantes na Ocorrência</label>
-								<select name="agentes_id[]" id="agentes_id" multiple class="form-control" required>
+								<select name="agentes_id[]" id="agentes_id" multiple class="form-control">
 									<option value="">Adicionar agente</option>  
+									
+
+
 									@foreach ($agentes as $agente)
-										<option value="{{$agente->id}}"> {{$agente->nome_servico}} - {{$agente->usuario->name}} </option> 
-									@endforeach
+										@foreach ($ocorrencia->agentes as $agente_incluso)
+											@if ($agente->id == $agente_incluso->id)
+												@if (!$agente_incluso->pivot->relator)
+														<option value="{{ $agente->id }}" selected>
+															{{ $agente->nome_servico }}
+															- {{ $agente->usuario->name }} </option>
+												@endif
+											@else
+												<option value="{{ $agente->id }}"> {{ $agente->nome_servico }} -
+														{{ $agente->usuario->name }}</option>
+											@endif
+										@endforeach
+								@endforeach
+
+
+									{{-- @foreach ($agentes as $agente)
+										<option value="{{$agente->id}}" 
+										@foreach ($ocorrencia->agentes as $v_agente) 
+											@if ($agente->id == $v_agente->id) 
+												selected @break 
+											@endif 
+										@endforeach>{{$agente->nome_servico}} - {{$agente->usuario->name}}</option> 
+									@endforeach --}}
+
 								</select>
 							</div>
 						</div>
 						<!-- ===========  FIM ADICIONAR OUTROS FUNCIONARIOS NO RELATORIO  ========== -->
 
 						<!-- =============================   IMAGEM   ============================== -->
+						
+						<div class="row"> 
+							@foreach($ocorrencia->imagens as $images)
+								 <div class="imagem_relatorio imagem_{{ $images->id }} form-group col-md-2 col-sm-2 col-xs-2">
+									  <div class="fileinput-new thumbnail">
+											<img src="{{ URL('storage/ocorrencia/') . '/' . $images->image }}" class="img_rel" width="300" height="200" style="display: initial;max-width: 100%;height: inherit;margin-right: initial;margin-left: inherit;"/>
+									  </div>
+									  <button data-id="{{ $images->id }}" type="button" class="btn btn-dange btn_excluir_imagem">Deletar</button>
+								 </div>
+							@endforeach
+					  </div>
+
+
+
 						<div class="form-group">
 							<label for="document">Imagens</label>
 							<div class="needsclick dropzone" id="document-dropzone">
@@ -256,6 +330,27 @@
 	<script src="{{ asset('js/dropzone.min.js')}}"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key={{$key_maps}}" defer></script>
 
+	<script>
+		$(function() {
+				  $("button.btn_excluir_imagem").click(function(e) {
+						e.preventDefault();
+						console.log("Chamou a função de deletar");
+						let id = $(this).data('id');
+						$.post("{{ url('ocorrencia/deleteimg') }}/" + id, {
+							 id: id,
+							 _method: "DELETE",
+							 _token: "{{ csrf_token() }}",
+						}, function(data) {
+							 // Apagar a imagem na tela
+							 $("div.imagem_relatorio.imagem_" + id).remove();
+							 console.log("REQUEST ENVIADA", data);
+						});
+						return false;
+				  })
+		});
+  </script>
+
+  
 	<script>
 		var x = document.getElementById("demo");
 		

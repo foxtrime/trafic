@@ -9,7 +9,8 @@ class Ocorrencia_Categorias extends Model
     protected $table = "ocorrencias_categorias";
     protected $fillable = [
      'categoria_id',
-     'ocorrencia_id'
+     'ocorrencia_id',
+     'relator',
     ];
     
     public function ocorrencia(){

@@ -40,8 +40,9 @@ Route::group(['middleware' => ['auth']], function () {
 	// 									OCORRENCIAS
 	//========================================================================================
     Route::get('ocorrencia/datatables', 				'OcorrenciaController@dados');
-    Route::post('ocorrencia/image', 'OcorrenciaController@storeImage')->name('ocorrencia.storeImage');
+    Route::post('ocorrencia/image',                     'OcorrenciaController@storeImage')->name('ocorrencia.storeImage');
     Route::post('ocorrencia/enviaformulario',			'OcorrenciaController@envia');
+    Route::delete('ocorrencia/deleteimg/{id}',          'OcorrenciaController@deleteimg');
     
 
     //========================================================================================

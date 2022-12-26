@@ -29,9 +29,9 @@ class Ocorrencia extends Model
     ];
 
 
-    public function ocorrencia_categorias()
+    public function categorias()
     {
-
+        return $this->belongsToMany('App\Models\ConfigCategoria', 'ocorrencias_categorias','ocorrencia_id','categoria_id');
     }
 
     public function ocorrencia_agentes()

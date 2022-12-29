@@ -82,6 +82,8 @@ class OcorrenciaController extends Controller
         $ocorrencia->latitude           =  $request->latitude;
         $ocorrencia->longitude          =  $request->longitude;
         $ocorrencia->municipio          =  $request->municipio;
+
+        $ocorrencia->agente_id          = agenteLogado()->id;
         
 
         $ocorrencia->sequencia          = 'XXX';
@@ -305,52 +307,22 @@ class OcorrenciaController extends Controller
      {
 
         $gerir_ocorrencia = Auth::user()->can("GERIR OCORRENCIA");
-        $criar_ocorrencia = Auth::user()->can("CRIAR OCORRENCIA");
-        $array_ocorrencias = [];
-        
+        $criar_ocorrencia = Auth::user()->can("CRIAR OCORRENCIA");    
+
         if($gerir_ocorrencia && $criar_ocorrencia){
-
-            $ocorrencias = Ocorrencia::with('agentes')->where('enviado',1)->get();
-
-            $ocorrencias_agente = Ocorrencia_Agentes::where('agente_id',Auth::user()->agente->id)->get();
-
-            foreach($ocorrencias as $ocorrencia){
-				array_push($array_ocorrencias, $ocorrencia);
-			}
-
-            foreach($ocorrencias_agente as $ocorrencia_agente){
-				$occorencias_onde_citado = Ocorrencia::with('agentes')->find($ocorrencia_agente->ocorrencia_id);
-				array_push($array_ocorrencias,$occorencias_onde_citado);
-			} 
-        
-            $array_ocorrencias = array_unique($array_ocorrencias);
-
+            $ocorrencias 	= Ocorrencia::with('agentes')
+                                                        ->where('enviado',1)
+                                                            ->orWhere('agente_id', '=', Auth::user()->agente->id)
+                                                                ->orderBy('data','desc')->orderBy('sequencia','desc')->get();
         }elseif($criar_ocorrencia){
-
-            $ocorrencias_agente = Ocorrencia_Agentes::where('agente_id',Auth::user()->agente->id)->get();
-
-            foreach($ocorrencias_agente as $ocorrencia_agente)
-            {
-                $ocorrencias_citado = Ocorrencia::with('agentes')->find($ocorrencia_agente->ocorrencia_id);
-                array_push($array_ocorrencias,$ocorrencias_citado);
-            }
-            
+            $ocorrencias 	= Ocorrencia::with('agentes')->where('agente_id', '=', Auth::user()->agente->id)->get();
         }else{
             $ocorrencias = Ocorrencia::with('agentes')->where('enviado',1)->get();
-
-            foreach($ocorrencias as $ocorrencia)
-            {
-                array_push($array_ocorrencias, $ocorrencia);
-            }
         }
-
-        
-        // dd($array_ocorrencias);
 
         $colecao = collect();
 
-       
-        foreach($array_ocorrencias as $ocorrencia)
+        foreach($ocorrencias as $ocorrencia)
         {
             $acoes = "";
 

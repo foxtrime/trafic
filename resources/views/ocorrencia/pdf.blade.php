@@ -114,9 +114,9 @@ td{
            <div class="col-md-3 col-sm-3 col-xs-12">
               <strong>Atendimento:</strong> {{$ocorrencia->atendimento->nome}}
            </div>
+           <br>
         @endif   
             
-            <br>
 
         @if (isset($ocorrencia->conducao->nome))
            <div class="col-md-3 col-sm-3 col-xs-12">
@@ -129,34 +129,35 @@ td{
            <div class="col-md-3 col-sm-3 col-xs-12">   
               <strong>Tipo:</strong> {{$ocorrencia->tipo->nome}}
            </div>
+           <br>
         @endif   
         
-            <br>
 
         @if (isset($ocorrencia->clima->nome))            
            <div class="col-md-3 col-sm-3 col-xs-12">
               <strong>Clima:</strong> {{$ocorrencia->clima->nome}}
            </div>
+           <br>
         @endif  
 
-            <br>
 
         @if (isset($ocorrencia->transportado->nome))
            <div class="col-md-3 col-sm-3 col-xs-12">
               <strong>Transportado:</strong> {{$ocorrencia->transportado->nome}}
            </div>
+           <br>
         @endif 
 
+    
+            <div class="container">
+                <span style="font-weight:bold;">Categorias:</span>
+                   @foreach ($ocorrencia->categorias as $categoria)
+                    {{$categoria->nome}} /
+                   @endforeach
+		    </div>
+
             <br>
-
-        <div class="container">
-            <span style="font-weight:bold;">Categorias:</span>
-               @foreach ($ocorrencia->categorias as $categoria)
-                {{$categoria->nome}} /
-               @endforeach
-		</div>
-
-        <br>
+       
 
         <table cellpadding="5" cellspacing="0" style="width: 100%;">
             <tr>

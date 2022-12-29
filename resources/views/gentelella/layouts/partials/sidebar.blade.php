@@ -5,7 +5,7 @@
 				<a href="{{ route('home')}}"><i class="fas fa-home"></i> Principal </a>
 			</li> 
 		
-			@if(auth()->user()->can('GERIR OCORRENCIA') || auth()->user()->can('CRIAR OCORRENCIA') || auth()->user()->can('VER OCORRENCIA'))
+			@if(auth()->user()->can('GERIR OCORRENCIA') || auth()->user()->can('CRIAR OCORRENCIA'))
 				<li>
 					<a><i class="fas fa-book-open"></i> Ocorrências <span class="fa fa-chevron-down"></span></a>
 					<ul class="nav child_menu">

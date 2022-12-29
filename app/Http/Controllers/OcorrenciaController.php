@@ -310,19 +310,20 @@ class OcorrenciaController extends Controller
         
         if($gerir_ocorrencia && $criar_ocorrencia){
 
-            $ocorrencias 				= Ocorrencia::with('agentes')->where('enviado',1)->get();
-			$ocorrencias_agente 		= Ocorrencia_Agentes::where('agente_id',Auth::user()->agente->id)->get();
-		
-			foreach($ocorrencias as $ocorrencia){
+            $ocorrencias = Ocorrencia::with('agentes')->where('enviado',1)->get();
+
+            $ocorrencias_agente = Ocorrencia_Agentes::where('agente_id',Auth::user()->agente->id)->get();
+
+            foreach($ocorrencias as $ocorrencia){
 				array_push($array_ocorrencias, $ocorrencia);
 			}
 
-			foreach($ocorrencias_agente as $ocorrencia_agente){
+            foreach($ocorrencias_agente as $ocorrencia_agente){
 				$occorencias_onde_citado = Ocorrencia::with('agentes')->find($ocorrencia_agente->ocorrencia_id);
 				array_push($array_ocorrencias,$occorencias_onde_citado);
 			} 
-		
-			$array_ocorrencias = array_unique($array_ocorrencias);
+        
+            $array_ocorrencias = array_unique($array_ocorrencias);
 
         }elseif($criar_ocorrencia){
 
@@ -333,7 +334,7 @@ class OcorrenciaController extends Controller
                 $ocorrencias_citado = Ocorrencia::with('agentes')->find($ocorrencia_agente->ocorrencia_id);
                 array_push($array_ocorrencias,$ocorrencias_citado);
             }
-
+            
         }else{
             $ocorrencias = Ocorrencia::with('agentes')->where('enviado',1)->get();
 
@@ -343,9 +344,12 @@ class OcorrenciaController extends Controller
             }
         }
 
+        
+        // dd($array_ocorrencias);
 
         $colecao = collect();
 
+       
         foreach($array_ocorrencias as $ocorrencia)
         {
             $acoes = "";
@@ -417,7 +421,7 @@ class OcorrenciaController extends Controller
 
             ]);
         }
-        
+
         return DataTables::of($colecao)->rawColumns(['acoes'])->make(true);
 
      }

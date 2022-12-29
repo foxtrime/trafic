@@ -188,7 +188,7 @@
 							<label class="control-label">Categoria</label>
 							{{-- <input type="text" id="nome" class="form-control" placeholder="Nome" name="nome" minlength="4" maxlength="100"
 						   required >	 --}}
-						   	<select name="categoria_id[]" id="categoria_id" multiple class="form-control" required>
+						   	<select name="categoria_id[]" id="categoria_id" multiple class="form-control">
 
 								@foreach ($categorias as $categoria)
 									<option value="{{$categoria->id}}" 

@@ -19,7 +19,6 @@ class PermissoesSeeder extends Seeder
         Permission::create(['name' => 'LOGIN']);
         Permission::create(['name' => 'CRIAR OCORRENCIA']);
         Permission::create(['name' => 'GERIR OCORRENCIA']);
-        Permission::create(['name' => 'VER OCORRENCIA']);
         Permission::create(['name' => 'GERIR AGENTE']);
         Permission::create(['name' => 'VER AGENTE']);
         Permission::create(['name' => 'VER CONFIGURACAO']);

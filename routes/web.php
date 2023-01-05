@@ -35,6 +35,12 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::put('user/perm',							'UserController@permSave');   
     
 
+    //========================================================================================
+	// 									AGENTES
+	//========================================================================================
+    Route::get('agente/situacao/{agente_id}',          'AgenteSituacaoController@index')->name('agente_situacao');
+
+
 
 	//========================================================================================
 	// 									OCORRENCIAS

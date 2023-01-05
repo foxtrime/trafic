@@ -213,14 +213,14 @@ class AgenteController extends Controller
 			// 							." title='Alterações do Guarda'> "  
 			// 							." <i class='glyphicon glyphicon-screenshot'></i></a> ";
 									
-			// $btn_situacao = "<a href='".url("guarda/situacao/$guarda->id")."' "
-			// 							." id='btn_situacao_guarda'" 
-			// 							." class='btn btn-info btn-xs action botao_acao' " 
-			// 							." data-toggle='tooltip' data-placement='bottom' " 
-			// 							." data-desabilitado = 'false' "
-			// 							." data-guarda = $guarda->id "
-			// 							." title='Alterar Situação do Guarda'> "  
-			// 							." <i class='glyphicon glyphicon-tags'></i></a> ";
+			$btn_situacao = "<a href='".url("agente/situacao/$agente->id")."' "
+										." id='btn_situacao_agente'" 
+										." class='btn btn-info btn-xs action botao_acao' " 
+										." data-toggle='tooltip' data-placement='bottom' " 
+										." data-desabilitado = 'false' "
+										." data-agente = $agente->id "
+										." title='Alterar Situação do Agente'> "  
+										." <i class='glyphicon glyphicon-tags'></i></a> ";
 									
 									
 			// $btn_visualiza	= "<a href='" .url("guarda/$guarda->id")."' " 
@@ -276,7 +276,7 @@ class AgenteController extends Controller
 		
 			
 			// $acoes = $acoes  .$btn_capacitacao .$btn_alteracao  .$btn_situacao .$btn_visualiza  .$btn_edita .$btn_print;
-			$acoes = $acoes  .$btn_edita;
+			$acoes = $acoes  .$btn_edita .$btn_situacao;
 			
 
 			if (isset($agente->responsavel )) 
